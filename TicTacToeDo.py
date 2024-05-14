@@ -28,7 +28,7 @@ for i in range(1000):
         action = agent.choose_action(state)
         # print('Round',round)
         # print('Action',action)
-        print(state)
+        # print(state)
         # 执行动作，获取执行完的棋盘状态、奖励和结束标志
         result_state, reward, done, _ = env.step(action)
         # print('result_state',result_state)
