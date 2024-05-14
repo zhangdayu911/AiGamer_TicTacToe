@@ -11,7 +11,7 @@ agent = TicTacToeQLearningAgent()
 print("[Success]--Creating TicTacToeQLearningAgent")
 
 # 训练智能体
-for i in range(1000):
+for i in range(10000):
     # 在环境中重置状态
     state = env.reset()
     print("[Success]--env.reset")
@@ -54,18 +54,20 @@ while play_again:
     # 在环境中重置状态
     state = env.reset()
     done = False
+    env.render()
 
     # 游戏循环
     while not done:
         # 玩家动作
-        env.render()
         env.human_move()
         done, _ = env.check_winner()
         if done:
             break
 
         # AI动作
-        state, _, done, _ = env.step(agent.choose_action(state))
+        ai_action = agent.choose_action(state)
+        state, _, done, _ = env.step(ai_action)
+        print(ai_action)
         env.render()
 
     # 询问是否再玩一局
