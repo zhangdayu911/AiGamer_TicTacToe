@@ -13,27 +13,27 @@ class TicTacToeQLearningAgent:
 
     def get_q_value(self, state, action):
         state_tuple = tuple(map(tuple, state))
-        print('state_tuple',state_tuple)
+        # print('state_tuple',state_tuple)
         return self.q_table.get((state_tuple, action), 0.0)
 
     def update_q_value(self, state, action, reward, next_state):
         # 获取当前Q值
         current_q_value = self.get_q_value(state, action)
-        print('current_q_value',current_q_value)
+        # print('current_q_value',current_q_value)
         # self.get_legal_actions(next_state)不为空时执行，即下一步有剩余可选位置
         if  self.get_legal_actions(next_state):
             # 计算下一个状态的最大Q值
             max_next_q_value = max([self.get_q_value(next_state, a) for a in self.get_legal_actions(next_state)])
-            print('max_next_q_value',max_next_q_value)
+            # print('max_next_q_value',max_next_q_value)
             # 根据Q-learning公式计算新的Q值
             new_q_value = current_q_value + self.alpha * (reward + self.gamma * max_next_q_value - current_q_value)
-            print('new_q_value',new_q_value)
+            # print('new_q_value',new_q_value)
             # 将state转化为元祖
             state_tuple = tuple(map(tuple, state))
-            print('state_tuple',state_tuple)
+            # print('state_tuple',state_tuple)
             # 更新Q表
             self.q_table[(state_tuple, action)] = new_q_value
-            print('new_q_value',new_q_value)
+            # print('q_table',self.q_table)
 
 
 
