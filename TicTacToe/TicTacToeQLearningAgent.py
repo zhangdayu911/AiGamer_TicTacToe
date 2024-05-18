@@ -20,7 +20,7 @@ class TicTacToeQLearningAgent:
         # 获取当前Q值
         current_q_value = self.get_q_value(state, action)
         # print('current_q_value',current_q_value)
-        # 判断self.get_legal_actions(next_state)不为空时执行，即下一步有剩余可选位置
+        # self.get_legal_actions(next_state)不为空时执行，即下一步有剩余可选位置
         if  self.get_legal_actions(next_state):
             # 计算下一个状态的最大Q值
             max_next_q_value = max([self.get_q_value(next_state, a) for a in self.get_legal_actions(next_state)])
