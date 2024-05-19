@@ -4,6 +4,7 @@ import numpy as np
 import random
 
 
+
 class TicTacToeQLearningAgent:
     def __init__(self, epsilon=0.1, alpha=0.5, gamma=1.0):
         self.epsilon = epsilon  # 探索率
@@ -12,6 +13,7 @@ class TicTacToeQLearningAgent:
         self.q_table = {}  # 初始化Q表为空字典
 
     def get_q_value(self, state, action):
+        # 将state转化为一纬
         state_tuple = tuple(map(tuple, state))
         # print('state_tuple',state_tuple)
         return self.q_table.get((state_tuple, action), 0.0)
@@ -28,12 +30,14 @@ class TicTacToeQLearningAgent:
             # 根据Q-learning公式计算新的Q值
             new_q_value = current_q_value + self.alpha * (reward + self.gamma * max_next_q_value - current_q_value)
             # print('new_q_value',new_q_value)
-            # 将state转化为元祖
-            state_tuple = tuple(map(tuple, state))
-            # print('state_tuple',state_tuple)
-            # 更新Q表
-            self.q_table[(state_tuple, action)] = new_q_value
-            # print('q_table',self.q_table)
+        else:
+            new_q_value = current_q_value + self.alpha * (reward - current_q_value)
+        # 将state转化为元祖
+        state_tuple = tuple(map(tuple, state))
+        # print('state_tuple',state_tuple)
+        # 更新Q表
+        self.q_table[(state_tuple, action)] = new_q_value
+        # print('q_table',self.q_table)
 
 
 
@@ -42,15 +46,20 @@ class TicTacToeQLearningAgent:
         return [(i, j) for i in range(3) for j in range(3) if state[i, j] == 0]
 
     def choose_action(self, state):
+        # 遍历所有可选动作的q_value
+        q_values = {a: self.get_q_value(state, a) for a in self.get_legal_actions(state)}
+        # 获取最大q值的行动
+        max_q_value = max(q_values.values())
+        best_actions = [a for a, q in q_values.items() if q == max_q_value]
+        # 在q_vlaue中随机选择一个动作
+        best_actions_index = random.randint(0, len(best_actions) - 1)
+        # 随机探索，如果小于探索值则随机探索；
         if np.random.uniform(0, 1) < self.epsilon:  # 探索
             # 在当前剩余可选位置的list中随机选择一个
             location = self.get_legal_actions(state)
             return location[random.randint(0, len(location) - 1)]
         else:  # 利用Q表选择最优动作
-            q_values = {a: self.get_q_value(state, a) for a in self.get_legal_actions(state)}
-            max_q_value = max(q_values.values())
-            best_actions = [a for a, q in q_values.items() if q == max_q_value]
-            best_actions_index = random.randint(0, len(best_actions) - 1)
+            # 返回最优动作
             return best_actions[best_actions_index]
 
 
