@@ -12,36 +12,38 @@ agent = TicTacToeQLearningAgent()
 print("[Success]--Creating TicTacToeQLearningAgent")
 
 # 训练智能体
-for i in range(1000):
+for i in range(100000):
     # 在环境中重置状态
     state = env.reset()
-    print("[Success]--env.reset")
-    print(state)
+    # print("[Success]--env.reset")
+    # print(state)
 
     # 默认游戏未结束
     done = False
-    print(done)
+    # print(done)
 
     round = 1
     # 未结束时执行下方循环
     while not done:
         # 选择动作
-        action = agent.choose_action(state)
+        try_state = state
+        action = agent.choose_action(state,env)
         # print('Round',round)
         # print('Action',action)
         # print(state)
         # 执行动作，获取执行完的棋盘状态、奖励和结束标志
-        result_state, reward, done, _ = env.step(action)
+        next_state, reward, done, _ = env.step(action)
         # print('result_state',result_state)
         # print('reward',reward)
         # print(done)
 
         # 更新Q值
-        agent.update_q_value(state, action, reward, result_state)
+        agent.update_q_value(state, action, reward, next_state)
         # 更新状态
-        state = result_state
+        state = next_state
         round += 1
 
+    print('reward为',reward)
 
 # 输出 Q 表
 print("Final Q Table:")
@@ -58,6 +60,7 @@ while play_again:
 
     # 游戏循环
     while not done:
+
         # 玩家动作
         env.render()
         env.human_move()
@@ -66,8 +69,11 @@ while play_again:
             break
 
         # AI动作
-        state, _, done, _ = env.step(agent.choose_action(state))
+        state, _, done, _ = env.step(agent.choose_action(state,env))
         env.render()
+
+
+
 
     # 询问是否再玩一局
     play_again_input = input("是否再玩一局？(yes/no): ")
